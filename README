@@ -1,0 +1,54 @@
+***********************************************************************
+*
+* UPDATE FOR STARUML - JAVA MODULE
+* SUPPORT FOR JAVA 1.5 ADDED
+*
+* AUTHOR: Frank E. Hernandez
+* A.K.A: CODE MINION
+* DATE: July 31, 2011
+*
+* BUG REPORTS:
+* Send bugs report to: fhern006@fiu.edu
+*
+**************************************************************************
+
+WHAT IS IN THIS UPDATE:
+- SUPPORT FOR: enums
+- SUPPORT FOR: static imports
+- SUPPORT FOR: ehanced for
+- SUPPORT FOR: generics
+
+AGGREGATION VS. NORMAL
+SAME: 
+Both version support java 1.5
+
+DIFFERENCE:
+The old starUML-java used to create an assosication between classes 
+for member variables. This behavior has been left the same for the 
+NORMAL version. The AGGREGATION version creates aggregation relationships
+between classes rather than just directed association as it should be the
+case for java.
+
+INSTALLATION:
+
+AGGREGATION
+1- Go to: .\Aggregation_staruml-java\staruml-java\deploy.
+2- Copy staruml-java
+3- Find your installation directory for StarUML. (In My case D:\Program Files\StarUML\)
+4- Go to: \modules and replace your staruml-java folder.
+5- Start StarUML.
+
+NORMAL
+1- Go to: .\Normal_staruml-java\staruml-java\deploy.
+2- Copy staruml-java
+3- Find your installation directory for StarUML. (In My case D:\Program Files\StarUML\)
+4- Go to: \modules and replace your staruml-java folder.
+5- Start StarUML.
+
+NOTE: The only files that are actually required for this to work are JavaAddIn.dll,
+	  JavaParser.dll and java.GMR. So, if you would rather just copy those files
+	  more power to you.
+
+SOURCE:
+The source code for both version is also included with this release. The source code
+can be found inside the \staruml-java\src folder of each version.
