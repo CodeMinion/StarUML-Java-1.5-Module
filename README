@@ -52,3 +52,7 @@ NOTE: The only files that are actually required for this to work are JavaAddIn.d
 SOURCE:
 The source code for both version is also included with this release. The source code
 can be found inside the \staruml-java\src folder of each version.
+
+UPDATE:
+09/21/2011		Fixed the issue of "Grammar Not Loaded". I great special thanks go
+				to Norm Wilson from ProGrammar for all his help.
