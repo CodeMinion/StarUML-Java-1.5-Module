@@ -809,11 +809,11 @@ end;
 procedure PJavaParserObj.AnalyzeJavaEnumFieldDeclararion(BaseNodeID: Integer; ADeclaringType: PJavaType);
 var
   JField: PJavaField;
-  SearchID, ContentID: Integer;
+  SearchID: Integer;
   FieldType, ContentType: string;
   TypeDim: Integer;
   Comment: string;
-  NF, NM, NC, NE: Integer;
+  NF, NM, NC: Integer;
 
 begin
   CheckBaseNode(BaseNodeID, 'enum_variable_declaration');
@@ -836,8 +836,8 @@ begin
     ADeclaringType.AddField(JField);
     SetJavaElementRangeInfo(JField, BaseNodeID);
 
-    ContentID := Pgmr.StartSearch('enum_variable_declarators.enum_variable_declarator.enum_conts', BaseNodeID);
-    NE := Pgmr.FindNext(ContentID);
+    //ContentID := Pgmr.StartSearch('enum_variable_declarators.enum_variable_declarator.enum_conts', BaseNodeID);
+    //NE := Pgmr.FindNext(ContentID);
 
     ContentType := GetNodeValue(NF, 'enum_conts');
     if ContentType<> '' then
@@ -847,7 +847,7 @@ begin
     JField.Documentation := Comment;
     JField.Type_ := FieldType;
     JField.TypeDimension := TypeDim + GetNodeCount(NF, 'empty_subscripts');
-    JField.InitializerExpression := GetNodeValue(NF, 'enum_conts');
+    //JField.InitializerExpression := GetNodeValue(NF, 'enum_conts');
     if NM = NOT_EXISTS then begin
       SetJavaMemberVisibilityAsDefault(JField);
       SetJavaMemberPropertiesAsDefault(JField);

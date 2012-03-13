@@ -61,4 +61,7 @@ UPDATE:
 				the enums are generated as nested class under the declaring class.
 				Aggregation version of module will be deprecrated unless there is 
 				interest to keep it alive (Send your feedback).
+03/13/2012		Added some corrections to the grammar. Centrilized the code 
+				on ModuleMainCode. Had too much of a mess of code with 
+				multiple versions. 				
 				
