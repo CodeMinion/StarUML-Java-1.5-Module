@@ -12,10 +12,10 @@ unit JavaParser_TLB;
 // ************************************************************************ //
 
 // PASTLWTR : 1.2
-// File generated on 7/31/2011 11:37:25 AM from Type Library described below.
+// File generated on 3/13/2012 1:15:13 AM from Type Library described below.
 
 // ************************************************************************  //
-// Type Lib: D:\Documents and Settings\MaxDraco\Desktop\PhD\Software Engineering\Tools\staruml-src\staruml-java\src\java-parser\JavaParser.tlb (1)
+// Type Lib: D:\Documents and Settings\MaxDraco\GitRepos\StarUML-Java-1.5-Module\Normal_staruml-java\staruml-java\src\java-parser\JavaParser.tlb (1)
 // LIBID: {CAC3FDB6-58F4-4F04-BBC7-68F2F0EFEFD6}
 // LCID: 0
 // Helpfile: 
