@@ -104,6 +104,13 @@ type
     procedure AnalyzeJavaClassDeclaration(BaseNodeID: Integer; APackage: PJavaPackage; ACompilationUnit: PJavaCompilationUnit); overload;
     procedure AnalyzeJavaClassDeclaration(BaseNodeID: Integer; AType: PJavaType; ACompilationUnit: PJavaCompilationUnit); overload;
     procedure FillOutInterfaceAttributes(BaseNodeID: Integer; AInterface: PJavaType);
+    // CODE MINION
+    procedure AnalyzeJavaEnumDeclaration(BaseNodeID: Integer; APackage: PJavaPackage; ACompilationUnit: PJavaCompilationUnit); overload;
+    procedure AnalyzeJavaEnumDeclaration(BaseNodeID: Integer; AType: PJavaType; ACompilationUnit: PJavaCompilationUnit); overload;
+    procedure FillOutEnumAttributes(BaseNodeID: Integer; AClass: PJavaType);
+    procedure AnalyzeJavaEnumMembersDeclaration(BaseNodeID: Integer; ADeclaringType: PJavaType);
+    procedure AnalyzeJavaEnumFieldDeclararion(BaseNodeID: Integer; ADeclaringType: PJavaType);
+    // CODE MINION
     procedure AnalyzeJavaInterfaceDeclaration(BaseNodeID: Integer; APackage: PJavaPackage; ACompilationUnit: PJavaCompilationUnit); overload;
     procedure AnalyzeJavaInterfaceDeclaration(BaseNodeID: Integer; AType: PJavaType; ACompilationUnit: PJavaCompilationUnit); overload;
     procedure AnalyzeJavaMembersDeclaration(BaseNodeID: Integer; ADeclaringType: PJavaType);
@@ -128,8 +135,6 @@ type
     function GetDllPath: string;
     // error check functions
     procedure CheckBaseNode(NodeID: Integer; SymbolName: string);
-    {CODE MINION HELPER FUNCTIONS}
-    function StripGeneric(typeWithGenerics: string):string;
  
   public
     constructor Create;
@@ -411,11 +416,18 @@ begin
   NC := Pgmr.Find('class_declaration', BaseNodeID);
   if NC <> NOT_EXISTS then
     AnalyzeJavaClassDeclaration(NC, APackage, ACompilationUnit)
-  // interfaces
+
   else begin
-    NI := Pgmr.Find('interface_declaration', BaseNodeID);
-    Assert(NI <> NOT_EXISTS);
-    AnalyzeJavaInterfaceDeclaration(NI, APackage, ACompilationUnit);
+    NC := Pgmr.Find('enum_declaration', BaseNodeID);
+    if NC <> NOT_EXISTS then
+      AnalyzeJavaEnumDeclaration(NC, APackage, ACompilationUnit)
+
+    // interfaces
+    else begin
+      NI := Pgmr.Find('interface_declaration', BaseNodeID);
+      Assert(NI <> NOT_EXISTS);
+      AnalyzeJavaInterfaceDeclaration(NI, APackage, ACompilationUnit);
+      end;
   end;
 end;
 
@@ -429,14 +441,60 @@ begin
   NC := Pgmr.Find('class_declaration', BaseNodeID);
   if NC <> NOT_EXISTS then
     AnalyzeJavaClassDeclaration(NC, AType, ACompilationUnit)
-  // interfaces
+  // Enums
   else begin
-    NI := Pgmr.Find('interface_declaration', BaseNodeID);
-    Assert(NI <> NOT_EXISTS);
-    AnalyzeJavaInterfaceDeclaration(NI, AType, ACompilationUnit);
+    NC := Pgmr.Find('enum_declaration', BaseNodeID);
+    if NC <> NOT_EXISTS then
+      AnalyzeJavaEnumDeclaration(NC, AType, ACompilationUnit)
+     // interfaces
+    else begin
+      NI := Pgmr.Find('interface_declaration', BaseNodeID);
+      Assert(NI <> NOT_EXISTS);
+      AnalyzeJavaInterfaceDeclaration(NI, AType, ACompilationUnit);
+    end;
   end;
 end;
 
+
+//CODE MINION
+
+procedure PJavaParserObj.FillOutEnumAttributes(BaseNodeID: Integer; AClass: PJavaType);
+var
+  NM, NP, N: Integer;
+begin
+  CheckBaseNode(BaseNodeID, 'enum_declaration');
+
+  // basic attributes
+  SetJavaElementRangeInfo(AClass, BaseNodeID);
+  AClass.Name := GetNodeValue(BaseNodeID, 'class_name');
+  AClass.IsClass := True;
+  AClass.IsInterface := False;
+
+  // comment
+  NP := GetPrevAdjacentNode(BaseNodeID);
+  if (NP <> NOT_EXISTS) and (GetNodeSymbolName(NP) = 'block_comment') then
+    AClass.Documentation := Pgmr.GetValue(NP);
+
+  // visibility & modifiers
+  N := Pgmr.Find('modifiers', BaseNodeID);
+  if N = NOT_EXISTS then begin
+    SetJavaMemberVisibilityAsDefault(AClass);
+    SetJavaMemberPropertiesAsDefault(AClass);
+  end
+  else begin
+    SetJavaMemberVisibility(AClass, N);
+    SetJavaMemberProperties(AClass, N);
+  end;
+
+
+  // members
+  NM := Pgmr.Find('enum_field_declarations', BaseNodeID);
+  if NM <> NOT_EXISTS then begin
+    AnalyzeJavaEnumMembersDeclaration(NM, AClass);
+  end;
+end;
+
+//CODE MINION
 procedure PJavaParserObj.FillOutClassAttributes(BaseNodeID: Integer; AClass: PJavaType);
 var
   SearchID: Integer;
@@ -515,6 +573,37 @@ begin
   FillOutClassAttributes(BaseNodeID, JType);
 end;
 
+//CODE MINION
+procedure PJavaParserObj.AnalyzeJavaEnumDeclaration(BaseNodeID: Integer; APackage: PJavaPackage; ACompilationUnit: PJavaCompilationUnit);
+var
+  JType: PJavaType;
+begin
+  CheckBaseNode(BaseNodeID, 'enum_declaration');
+
+  JType := PJavaType.Create;
+  //JType.Name := 'Test';
+  APackage.AddType(JType);
+  JType.IsLocal := False;
+  JType.IsMember := False;
+  JType.CompilationUnit := ACompilationUnit;
+  FillOutEnumAttributes(BaseNodeID, JType);
+end;
+
+procedure PJavaParserObj.AnalyzeJavaEnumDeclaration(BaseNodeID: Integer; AType: PJavaType; ACompilationUnit: PJavaCompilationUnit);
+var
+  JType: PJavaType;
+begin
+  CheckBaseNode(BaseNodeID, 'enum_declaration');
+
+  JType := PJavaType.Create;
+  //JType.Name := 'Test';
+  AType.AddType(JType);
+  JType.IsLocal := False;
+  JType.IsMember := True;
+  JType.CompilationUnit := ACompilationUnit;
+  FillOutEnumAttributes(BaseNodeID, JType);
+end;
+// CODE MINION
 procedure PJavaParserObj.FillOutInterfaceAttributes(BaseNodeID: Integer; AInterface: PJavaType);
 var
   SearchID: Integer;
@@ -585,13 +674,90 @@ begin
   JType.CompilationUnit := ACompilationUnit;
   FillOutInterfaceAttributes(BaseNodeID, JType);
 end;
+//CODE MINION
+procedure PJavaParserObj.AnalyzeJavaEnumMembersDeclaration(BaseNodeID: Integer; ADeclaringType: PJavaType);
+var
+  SearchID: Integer;
+  N: Integer;
+begin
+  CheckBaseNode(BaseNodeID, 'enum_field_declarations');
 
+
+  // variables
+  SearchID := Pgmr.StartSearch('enum_field_declaration.enum_variable_declaration', BaseNodeID);
+  N := Pgmr.FindNext(SearchID);
+  while N <> NOT_EXISTS do begin
+    AnalyzeJavaEnumFieldDeclararion(N, ADeclaringType);
+    N := Pgmr.FindNext(SearchID);
+  end;
+  Pgmr.EndSearch(SearchID);
+
+  // variables
+  SearchID := Pgmr.StartSearch('enum_field_declaration.variable_declaration', BaseNodeID);
+  N := Pgmr.FindNext(SearchID);
+  while N <> NOT_EXISTS do begin
+    AnalyzeJavaFieldDeclararion(N, ADeclaringType);
+    N := Pgmr.FindNext(SearchID);
+  end;
+  Pgmr.EndSearch(SearchID);
+
+  // constructors
+  SearchID := Pgmr.StartSearch('enum_field_declaration.constructor_declaration', BaseNodeID);
+  N := Pgmr.FindNext(SearchID);
+  while N <> NOT_EXISTS do begin
+    AnalyzeJavaConstructorDeclararion(N, ADeclaringType);
+    N := Pgmr.FindNext(SearchID);
+  end;
+  Pgmr.EndSearch(SearchID);
+
+  // static initializers
+  SearchID := Pgmr.StartSearch('enum_field_declaration.static_initializer', BaseNodeID);
+  N := Pgmr.FindNext(SearchID);
+  while N <> NOT_EXISTS do begin
+    AnalyzeJavaInitializerDeclararion(N, ADeclaringType);
+    N := Pgmr.FindNext(SearchID);
+  end;
+  Pgmr.EndSearch(SearchID);
+
+  // methods
+  SearchID := Pgmr.StartSearch('enum_field_declaration.method_declaration', BaseNodeID);
+  N := Pgmr.FindNext(SearchID);
+  while N <> NOT_EXISTS do begin
+    AnalyzeJavaMethodDeclararion(N, ADeclaringType);
+    N := Pgmr.FindNext(SearchID);
+  end;
+  Pgmr.EndSearch(SearchID);
+
+  // types
+  SearchID := Pgmr.StartSearch('enum_field_declaration.type_declaration', BaseNodeID);
+  N := Pgmr.FindNext(SearchID);
+  while N <> NOT_EXISTS do begin
+    AnalyzeJavaTypeDeclaration(N, ADeclaringType, ADeclaringType.CompilationUnit);
+    N := Pgmr.FindNext(SearchID);
+  end;
+  Pgmr.EndSearch(SearchID);
+end;
+//CODE MINION
 procedure PJavaParserObj.AnalyzeJavaMembersDeclaration(BaseNodeID: Integer; ADeclaringType: PJavaType);
 var
   SearchID: Integer;
   N: Integer;
 begin
   CheckBaseNode(BaseNodeID, 'field_declarations');
+
+  // CODE Minion:
+  // In order to add more support for the enum I modified the
+  // parser a bit further. Now, enums are treated like nested
+  // classes.
+  // Enum types
+ {SearchID := Pgmr.StartSearch('field_declaration.enum_declaration', BaseNodeID);
+  N := Pgmr.FindNext(SearchID);
+  while N <> NOT_EXISTS do begin
+    AnalyzeJavaEnumTypeDeclaration(N, ADeclaringType, ADeclaringType.CompilationUnit);
+    N := Pgmr.FindNext(SearchID);
+  end;
+  Pgmr.EndSearch(SearchID);
+  }
 
   // variables
   SearchID := Pgmr.StartSearch('field_declaration.variable_declaration', BaseNodeID);
@@ -639,6 +805,62 @@ begin
   Pgmr.EndSearch(SearchID);
 end;
 
+//CODE MINION
+procedure PJavaParserObj.AnalyzeJavaEnumFieldDeclararion(BaseNodeID: Integer; ADeclaringType: PJavaType);
+var
+  JField: PJavaField;
+  SearchID, ContentID: Integer;
+  FieldType, ContentType: string;
+  TypeDim: Integer;
+  Comment: string;
+  NF, NM, NC, NE: Integer;
+
+begin
+  CheckBaseNode(BaseNodeID, 'enum_variable_declaration');
+
+  FieldType := '';//GetNodeValue(BaseNodeID, 'type.type_specifier');
+
+
+  TypeDim := GetNodeCount(BaseNodeID, 'type.empty_subscripts');
+  NM := Pgmr.Find('modifiers', BaseNodeID);
+
+  // comment
+  NC := GetPrevAdjacentNode(BaseNodeID);
+  if (NC <> NOT_EXISTS) and (GetNodeSymbolName(NC) = 'block_comment') then
+    Comment := Pgmr.GetValue(NC);
+
+  SearchID := Pgmr.StartSearch('enum_variable_declarators.enum_variable_declarator', BaseNodeID);
+  NF := Pgmr.FindNext(SearchID);
+  while NF <> NOT_EXISTS do begin
+    JField := PJavaField.Create;
+    ADeclaringType.AddField(JField);
+    SetJavaElementRangeInfo(JField, BaseNodeID);
+
+    ContentID := Pgmr.StartSearch('enum_variable_declarators.enum_variable_declarator.enum_conts', BaseNodeID);
+    NE := Pgmr.FindNext(ContentID);
+
+    ContentType := GetNodeValue(NF, 'enum_conts');
+    if ContentType<> '' then
+       ContentType:= '('+ContentType+')';
+
+    JField.Name := GetNodeValue(NF, 'ident') + ContentType;
+    JField.Documentation := Comment;
+    JField.Type_ := FieldType;
+    JField.TypeDimension := TypeDim + GetNodeCount(NF, 'empty_subscripts');
+    JField.InitializerExpression := GetNodeValue(NF, 'enum_conts');
+    if NM = NOT_EXISTS then begin
+      SetJavaMemberVisibilityAsDefault(JField);
+      SetJavaMemberPropertiesAsDefault(JField);
+    end
+    else begin
+      SetJavaMemberVisibility(JField, NM);
+      SetJavaMemberProperties(JField, NM);
+    end;
+    NF := Pgmr.FindNext(SearchID);
+  end;
+  Pgmr.EndSearch(SearchID);
+end;
+//CODE MINION
 procedure PJavaParserObj.AnalyzeJavaFieldDeclararion(BaseNodeID: Integer; ADeclaringType: PJavaType);
 var
   JField: PJavaField;
@@ -1038,43 +1260,6 @@ begin
   Result := ParseJavaFile(FileName);
 end;
 
-{CODE MINION HELPER FUNCTIONS}
-{ This function takes in a type and removes the generics section from
- it. This is done because  during my modification of the parser the
- generics clause is inserted as part of the type, however this is not
- a desirable outcome since we want to use the type for creating
- relations and files among others.
- }
-function PJavaParserObj.StripGeneric(typeWithGenerics: string):string;
-var
-  genericStart, stringSize : integer;
-  typeFixed : string;
-
-begin
-  typeFixed := typeWithGenerics;
-  // Get the position of the '<' this means the start of the generics.
-  genericStart := Pos('<', typeWithGenerics);
-  // If genericStart is 0 it means that this type does not support generics.
-  if(genericStart <> 0) then
-  begin
-
-    // Get the size of the old string.
-    stringSize := Length(typeWithGenerics);
-    // calcualte new length without generics
-    stringSize := stringSize - (stringSize - (genericStart -1));
-    // If it has generics then create a substring of the name that does not
-    // contains the generics portion.
-    // Create new string.
-    typeFixed := LeftStr(typeWithGenerics, stringSize);
-
-    // Remove white spaces.
-    typeFixed := Trim(typeFixed);
-
-    //Result := typeFixed;
-    end;
-
-    Result := typeFixed;
-end;
 
 // PJavaParserObj
 /////////////////////////////////////////////////////////////////////////////

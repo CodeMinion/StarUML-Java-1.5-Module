@@ -12,16 +12,16 @@ unit JavaParser_TLB;
 // ************************************************************************ //
 
 // PASTLWTR : 1.2
-// File generated on 2005-10-28 ¿ÀÈÄ 4:05:33 from Type Library described below.
+// File generated on 7/31/2011 11:37:25 AM from Type Library described below.
 
 // ************************************************************************  //
-// Type Lib: E:\Cvs\plastic\java-extension\src\java-parser\JavaParser.tlb (1)
+// Type Lib: D:\Documents and Settings\MaxDraco\Desktop\PhD\Software Engineering\Tools\staruml-src\staruml-java\src\java-parser\JavaParser.tlb (1)
 // LIBID: {CAC3FDB6-58F4-4F04-BBC7-68F2F0EFEFD6}
 // LCID: 0
 // Helpfile: 
 // HelpString: JavaParser Library
 // DepndLst: 
-//   (1) v2.0 stdole, (C:\WINDOWS\system32\stdole2.tlb)
+//   (1) v2.0 stdole, (D:\WINDOWS\system32\stdole2.tlb)
 // ************************************************************************ //
 {$TYPEDADDRESS OFF} // Unit must be compiled without type-checked pointers. 
 {$WARN SYMBOL_PLATFORM OFF}

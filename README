@@ -56,3 +56,9 @@ can be found inside the \staruml-java\src folder of each version.
 UPDATE:
 09/21/2011		Fixed the issue of "Grammar Not Loaded". I great special thanks go
 				to Norm Wilson from ProGrammar for all his help.
+03/12/2012		Added support for semicolon on the enum declaration for internal items. 
+				Added Support for array type on the generics. As of this version
+				the enums are generated as nested class under the declaring class.
+				Aggregation version of module will be deprecrated unless there is 
+				interest to keep it alive (Send your feedback).
+				
