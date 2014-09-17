@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=640">
+
+    <link rel="stylesheet" href="stylesheets/core.css" media="screen">
+    <link rel="stylesheet" href="stylesheets/mobile.css" media="handheld, only screen and (max-device-width:640px)">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+
+    <script type="text/javascript" src="javascripts/modernizr.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script type="text/javascript" src="javascripts/headsmart.min.js"></script>
+    <script type="text/javascript">
+      $(document).ready(function () {
+        $('#main_content').headsmart()
+      })
+    </script>
+    <title>Staruml-java-1.5-module by CodeMinion</title>
+  </head>
+
+  <body>
+    <a id="forkme_banner" href="https://github.com/CodeMinion/StarUML-Java-1.5-Module">View on GitHub</a>
+    <div class="shell">
+
+      <header>
+        <span class="ribbon-outer">
+          <span class="ribbon-inner">
+            <h1>Staruml-java-1.5-module</h1>
+            <h2>Update to the java module of StarUML. This version supports Java 1.5 syntax.</h2>
+          </span>
+          <span class="left-tail"></span>
+          <span class="right-tail"></span>
+        </span>
+      </header>
+
+      <section id="downloads">
+        <span class="inner">
+          <a href="https://github.com/CodeMinion/StarUML-Java-1.5-Module/zipball/master" class="zip"><em>download</em> .ZIP</a><a href="https://github.com/CodeMinion/StarUML-Java-1.5-Module/tarball/master" class="tgz"><em>download</em> .TGZ</a>
+        </span>
+      </section>
+
+
+      <span class="banner-fix"></span>
+
+
+      <section id="main_content">
+        <h1>
+<a name="update-for-staruml---java-module" class="anchor" href="#update-for-staruml---java-module"><span class="octicon octicon-link"></span></a>UPDATE FOR STARUML - JAVA MODULE</h1>
+
+<h2>
+<a name="support-for-java-15-added" class="anchor" href="#support-for-java-15-added"><span class="octicon octicon-link"></span></a>SUPPORT FOR JAVA 1.5 ADDED</h2>
+
+<p><strong>AUTHOR:</strong> Frank E. Hernandez</p>
+
+<p><strong>A.K.A:</strong> CODE MINION</p>
+
+<p><strong>DATE:</strong> July 31, 2011</p>
+
+<h3>
+<a name="what-is-in-this-update" class="anchor" href="#what-is-in-this-update"><span class="octicon octicon-link"></span></a>WHAT IS IN THIS UPDATE:</h3>
+
+<ul>
+<li>SUPPORT FOR: enums</li>
+<li>SUPPORT FOR: static imports</li>
+<li>SUPPORT FOR: ehanced for</li>
+<li>SUPPORT FOR: generics</li>
+</ul><h3>
+<a name="aggregation-vs-normal" class="anchor" href="#aggregation-vs-normal"><span class="octicon octicon-link"></span></a>AGGREGATION VS. NORMAL</h3>
+
+<p>SAME: 
+Both version support java 1.5</p>
+
+<h3>
+<a name="difference" class="anchor" href="#difference"><span class="octicon octicon-link"></span></a>DIFFERENCE:</h3>
+
+<p>The old starUML-java used to create an assosication between classes for member variables. This behavior has been left the same for the NORMAL version. The AGGREGATION version creates aggregation relationships between classes rather than just directed association as it should be the case for java.</p>
+
+<h3>
+<a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>INSTALLATION:</h3>
+
+<h3>
+<a name="aggregation" class="anchor" href="#aggregation"><span class="octicon octicon-link"></span></a>AGGREGATION</h3>
+
+<p>1- Go to: .\Aggregation_staruml-java\staruml-java\deploy.</p>
+
+<p>2- Copy staruml-java</p>
+
+<p>3- Find your installation directory for StarUML. (In My case D:\Program Files\StarUML)</p>
+
+<p>4- Go to: \modules and replace your staruml-java folder.</p>
+
+<p>5- Start StarUML.</p>
+
+<h3>
+<a name="normal" class="anchor" href="#normal"><span class="octicon octicon-link"></span></a>NORMAL</h3>
+
+<p>1- Go to: .\Normal_staruml-java\staruml-java\deploy.</p>
+
+<p>2- Copy staruml-java</p>
+
+<p>3- Find your installation directory for StarUML. (In My case D:\Program Files\StarUML)</p>
+
+<p>4- Go to: \modules and replace your staruml-java folder.</p>
+
+<p>5- Start StarUML.</p>
+
+<p>NOTE: The only files that are actually required for this to work are JavaAddIn.dll, JavaParser.dll and java.GMR. So, if you would rather just copy those files more power to you.</p>
+
+<h3>
+<a name="source" class="anchor" href="#source"><span class="octicon octicon-link"></span></a>SOURCE:</h3>
+
+<p>The source code for both version is also included with this release. The source code can be found inside the \staruml-java\src folder of each version.</p>
+
+<h3>
+<a name="update" class="anchor" href="#update"><span class="octicon octicon-link"></span></a>UPDATE:</h3>
+
+<p><strong>09/21/2011</strong>      Fixed the issue of "Grammar Not Loaded". I great special thanks go to Norm Wilson from ProGrammar for all his help.</p>
+
+<p><strong>03/12/2012</strong>      Added support for semicolon on the enum declaration for internal items. Added Support for array type on the generics. As of this version the enums are generated as nested class under the declaring class. Aggregation version of module will be deprecrated unless there is interest to keep it alive (Send your feedback).</p>
+
+<p><strong>03/13/2012</strong>      Added some corrections to the grammar. Centrilized the code on ModuleMainCode. Had too much of a mess of code with multiple versions.               </p>
+      </section>
+
+      <footer>
+        <span class="ribbon-outer">
+          <span class="ribbon-inner">
+            <p>this project by <a href="https://github.com/CodeMinion">CodeMinion</a> can be found on <a href="https://github.com/CodeMinion/StarUML-Java-1.5-Module">GitHub</a></p>
+          </span>
+          <span class="left-tail"></span>
+          <span class="right-tail"></span>
+        </span>
+        <p>Generated with <a href="http://pages.github.com">GitHub Pages</a> using Merlot</p>
+        <span class="octocat"></span>
+      </footer>
+
+    </div>
+
+    
+  </body>
+</html>
